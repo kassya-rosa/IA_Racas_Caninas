@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Imagem</title>
+</head>
+<body>
+    <h1>Upload de Imagem para Previsão</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">Escolha uma imagem JPEG:</label>
+        <input type="file" id="file" name="file" accept="image/jpeg">
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="result">
+        {% if result %}
+            <h2>Resultado da Previsão:</h2>
+            <img src="{{ result['image_url'] }}" alt="Uploaded Image">
+            <ul>
+                {% for prob, label in result['predictions'] %}
+                    <li>{{ prob }} - {{ label }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
