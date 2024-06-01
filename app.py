@@ -15,8 +15,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Carregue seu modelo aqui
 model = load_model('modelo_raca_caninas.h5')
 
+breed_list = os.listdir("Images/")
+
 # Mapeamento de rótulos
-label_maps_rev = {0: 'label1', 1: 'label2', 2: 'label3', 3: 'label4', 4: 'label5', 5: 'label6'}  # Adicione todos os mapeamentos necessários
+label_maps_rev = {}
+for i, v in enumerate(breed_list):
+    label_maps_rev.update({i : v})
 
 @app.route('/')
 def index():
