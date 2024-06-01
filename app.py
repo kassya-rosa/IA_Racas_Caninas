@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
+from werkzeug.utils import secure_filename
 import os
 from PIL import Image
 import numpy as np
@@ -15,7 +16,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 model = load_model('modelo_raca_caninas.h5')
 
 # Mapeamento de rótulos
-label_maps_rev = {0: 'label1', 1: 'label2'}  # Adicione todos os mapeamentos necessários
+label_maps_rev = {0: 'label1', 1: 'label2', 2: 'label3', 3: 'label4', 4: 'label5', 5: 'label6'}  # Adicione todos os mapeamentos necessários
 
 @app.route('/')
 def index():
@@ -47,7 +48,13 @@ def previsao_foto(filepath):
     img = imread(filepath)
     img = preprocess_input(img)
     probs = model.predict(np.expand_dims(img, axis=0))
-    predictions = [(f"{probs[0][idx]*100:.2f}%", label_maps_rev[idx]) for idx in probs.argsort()[0][::-1][:5]]
+    predictions = []
+    for idx in np.argsort(probs[0])[::-1][:5]:
+        try:
+            label = label_maps_rev[idx]
+            predictions.append((f"{probs[0][idx]*100:.2f}%", label))
+        except KeyError:
+            predictions.append((f"{probs[0][idx]*100:.2f}%", f"Label {idx} não mapeado"))
     return {'image_url': url_for('static', filename=filepath), 'predictions': predictions}
 
 if __name__ == '__main__':
