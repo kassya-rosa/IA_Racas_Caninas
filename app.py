@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from keras.api.models import load_model
-from keras.src.applications.densenet import preprocess_input
+from keras.api.applications.densenet import preprocess_input
 from skimage.io import imread
 
 app = Flask(__name__)
